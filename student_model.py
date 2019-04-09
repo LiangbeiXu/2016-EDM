@@ -18,6 +18,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn import metrics
 from math import sqrt
+from os import sys
 
 # flags
 tf.flags.DEFINE_float("epsilon", 0.1, "Epsilon value for Adam Optimizer.")
@@ -36,7 +37,8 @@ tf.flags.DEFINE_string("train_data_path", 'data/0910_b_train.csv', "Path to the 
 tf.flags.DEFINE_string("test_data_path", 'data/0910_b_test.csv', "Path to the testing dataset")
 
 FLAGS = tf.flags.FLAGS
-FLAGS._parse_flags()
+#FLAGS._parse_flags()
+FLAGS(sys.argv)
 print("\nParameters:")
 for attr, value in sorted(FLAGS.__flags.items()):
     print("{}={}".format(attr.upper(), value))
@@ -228,7 +230,7 @@ def read_data_from_csv_file(fileName):
             rows.append(row)
     index = 0
     i = 0
-    print "the number of rows is " + str(len(rows))
+    print ("the number of rows is " + str(len(rows)))
     tuple_rows = []
     #turn list to tuple
     while(index < len(rows)-1):
@@ -247,8 +249,8 @@ def read_data_from_csv_file(fileName):
     #shuffle the tuple
 
     random.shuffle(tuple_rows)
-    print "The number of students is ", len(tuple_rows)
-    print "Finish reading data"
+    print ("The number of students is ", len(tuple_rows))
+    print ("Finish reading data")
     return tuple_rows, max_num_problems, max_skill_num+1
 
 def main(unused_args):
@@ -313,7 +315,7 @@ def main(unused_args):
                 print("Epoch: %d Train Metrics:\n rmse: %.3f \t auc: %.3f \t r2: %.3f \n" % (i + 1, rmse, auc, r2))
 
                 if((i+1) % FLAGS.evaluation_interval == 0):
-                    print "Save variables to disk"
+                    print ("Save variables to disk")
                     save_path = saver.save(session, model_name)
                     print("*"*10)
                     print("Start to test model....")
